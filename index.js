@@ -27,8 +27,7 @@ connection.connect(function(error) {
 });
 
 // ユーザ登録
-function createUser(id, gender, age) {
-	console.log('query');
+function createUser(id, gender, age) {	
 	var insertQuery = 'insert into Users (id, gender, age) values ('+id+",'"+gender+"',"+age+');';
 	connection.query(insertQuery, function(err, rows, fields) {
 		if (err) {
@@ -58,16 +57,15 @@ function getUserInfo(id) {
 // ユーザのネタを登録する
 function registerStory(id, story) {
 	// insert into Storys(id, story) values(123, ‘話のネタ’);
-	var insertQuery = "insert into Storys(id,sotry) ";
-	insertQuer += "values("+ id +",'"+ story +"')";
+	var insertQuery = "insert into Storys(id,story) ";
+	insertQuery += "values("+ id +",'"+ story +"');";
 
-	connection.query(inserrQuery, function(err, rows, fields) {
+	connection.query(insertQuery, function(err, rows, fields) {
 		if (err)  {
 			console.log('register story err: ' + err);
 
 			return 'error';
 		}
-		console.log('id: ' + rows[0].id);
 		return 'ok';
 	});
 }
@@ -103,14 +101,29 @@ app.post("/api/getUserInfo", function(req, res) {
 });
 
 app.post('/api/RegisterStory', function(req, res) {
-	console.log(req.body);
+	var data = '';
+	req.on('data',function(chunk) {
+		data += chunk;
+	});
+	req.on('end', function() {
+		var json = JSON.parse(data);
+		var id = json['ID'];
+		var story = json['story'];
+
+		var result = registerStory(id, story);
+
+		console.log('result : ' + result);
+	});
+
 	res.contentType('application/json');
-	console.log('register story');
 	res.end(JSON.stringify({'msg':'200 OK'}));
 });
 
 var server = app.listen(PORT, function() {
 	console.log('running post :' + PORT);
 });
+// register story
+// curl -X POST -d '{"ID":"123","story":"トイレットペーパー"}' http://192.168.3.70:5000/api/RegisterStory
+
 
 // curl -X POST -d '{"Human":{"ID":"123","Gender":"Male","Age":"21"}}' http://192.168.3.70:5000/api/createUser
