@@ -39,9 +39,7 @@ var registerStory = function(id, story, callback) {
 	connection.query(insertQuery, function(err, rows, fields) {
 		if (err)  {
 			console.log('register story err: ' + err);
-			return 'error';
 		}
-		return 'ok';
 		callback(err, rows);
 	});
 }
