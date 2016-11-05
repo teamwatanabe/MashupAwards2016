@@ -8,15 +8,13 @@ var app = express();
 app.use(morgan('short'));
 
 var PORT = 5000;
+var DBNAME = 'ma_2016';
 
-var databaseName = 'ma_2016';
-
-//database connect
 var connection = mysql.createConnection({
 	host:'127.0.0.1',
 	user:'root',
 	password:'yuta0730',
-	database:'ma_2016'
+	database:DBNAME
 });
 connection.connect(function(error) {
 	if (error) {
@@ -27,20 +25,18 @@ connection.connect(function(error) {
 });
 
 // ユーザ登録
-function createUser(id, gender, age) {	
+function createUser(id, gender, age) {
 	var insertQuery = 'insert into Users (id, gender, age) values ('+id+",'"+gender+"',"+age+');';
 	connection.query(insertQuery, function(err, rows, fields) {
 		if (err) {
 			console.log('create User err: ' + err);
-
-			return 'error'
+			return 'error';
 		}
 		return 'ok';
 	});
 }
 // ユーザのネタを登録する
 function registerStory(id, story) {
-	// insert into Storys(id, story) values(123, ‘話のネタ’);
 	var insertQuery = "insert into Storys(id,story) ";
 	insertQuery += "values("+ id +",'"+ story +"');";
 
@@ -60,7 +56,6 @@ var getUserStory = function(id, callback) {
 		if (err) {
 			console.log('get user info err: ' + err);
 		}
-		// return rows;
 		callback(rows);
 	});
 }
@@ -109,37 +104,14 @@ app.post("/api/getUserStory", function(req, res) {
 			res.end(jsonStr);
 		});
 	});
-	// var data = '';
-	// req.on('data', function(chunk) {
-	// 	data += chunk;
-	// });
-	// req.on('end', function() {
-	// 	var jsonData = JSON.parse(data);
-	// 	var id = jsonData['ID'];
-	// 	getUserStory(id, function(results) {
-	// 		// res.send(results);
-	// 		// console.log(results);
-	// 		res.contentType('application/json');
-	// 		var obj = [];
-	// 		for (var i = 0;i < results.length; i++) {
-	// 			console.log(results[i]['story']);
-	// 			obj.push(results[i]['story']);
-	// 		}
-	// 		var json = {
-	// 			story:obj
-	// 		};
-	// 		console.log(json);
-	// 		var jsonStr = JSON.stringify(json);
-	// 		console.log(jsonStr['story']);
-	// 		res.end(JSON.stringify(jsonStr));
-	// 	});
-	// });
 });
 
 app.post('/api/RegisterStory', function(req, res) {
 	decodeJson(req, function(json) {
 		var id = json['ID'];
 		var story = json['Story'];
+		console.log(id);
+		console.log(story);
 		var result = registerStory(id, story);
 		console.log('result : ' + result);
 	});
