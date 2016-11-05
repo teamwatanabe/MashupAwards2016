@@ -17,3 +17,9 @@ $ curl -X POST -d '{"ID":"999","Story":"眠れない"}' http://192.168.3.70:5000
 $ curl -X POST -d '{"ID":"999"}' http://192.168.3.70:5000/api/getUserStory
 ```
   
+
+## 遅延情報を取得するAPI
+
+```
+$ curl http://192.168.3.70:5000/api/DelayInfo
+```
