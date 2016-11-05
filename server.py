@@ -6,19 +6,25 @@ import socket
 from flask import Flask, request, redirect, url_for, abort, jsonify
 from flask_restful import Resource, Api
 from werkzeug.utils import secure_filename
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
+mysql = MySQL(app)
 
-api = Api(app)
+@app.route('/api/FaceRecognization', methods=['POST'])
+def post(self):
 
-class FaceRecognization(Resource):
-	def post(self):
-		return json.dumps({'msg':'response message'})
+	# stub
+	return json.dumps({'msg':'response message'})
 
-	def get(self):
-		return 'No Allow Method'
+	if request.headers['Content-Type'] != 'application/json':
+		print(request.headers['Content-Type'])
+		return flask.jsonify(res='error'), 400
 
-api.add_resource(FaceRecognization, '/api/FaceRecognization')
+	print(request.json)
+
+	return flask.jsonify(res='ok')
+
 
 if __name__ == '__main__':
 	ip = socket.gethostbyname(socket.gethostname())
