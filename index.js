@@ -94,12 +94,22 @@ app.post("/api/getUserStory", function(req, res) {
 	req.on('end', function() {
 		var jsonData = JSON.parse(data);
 		var id = jsonData['ID'];
-		var result = getUserStory(id, function(results) {
+		getUserStory(id, function(results) {
 			// res.send(results);
-			console.log(results);
+			// console.log(results);
 			res.contentType('application/json');
-			var json = JSON.stringify(results);
-			res.end(JSON.stringify(json));
+			var obj = [];
+			for (var i = 0;i < results.length; i++) {
+				console.log(results[i]['story']);
+				obj.push(results[i]['story']);
+			}
+			var json = {
+				story:obj
+			};
+			console.log(json);
+			var jsonStr = JSON.stringify(json);
+			console.log(jsonStr['story']);
+			res.end(JSON.stringify(jsonStr));
 		});
 	});
 });
@@ -112,7 +122,7 @@ app.post('/api/RegisterStory', function(req, res) {
 	req.on('end', function() {
 		var json = JSON.parse(data);
 		var id = json['ID'];
-		var story = json['story'];
+		var story = json['Story'];
 
 		var result = registerStory(id, story);
 

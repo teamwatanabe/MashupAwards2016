@@ -904,10 +904,8 @@ class MyClass(GeneratedClass):
                     text = r.text
                     text = json.loads(text,'Shift_JIS')
                     #text = json.dumps(text, ensure_ascii=False)
+                    self.logger.info('output text')
                     self.logger.info(text)
-                    self.logger.info("hogehoge")
-                    self.logger.info(text['msg'])
-                    self.outputTxt(str(text['msg']))
 
                 except:
                     self.logger.info("hoge")
