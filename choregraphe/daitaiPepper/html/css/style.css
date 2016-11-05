@@ -1,0 +1,210 @@
+@charset "UTF-8";
+/* 共通CSS */
+
+/**************************************************************************/
+/* 全体構成                                            　　　　　　　       */
+/**************************************************************************/
+.body {
+    position: absolute;
+    width: 1707px;
+    height:1067px;
+    font-family:sans-serif;
+    background-image: url("../img/parts/BG_ALL_All_NST.png");
+    background-repeat: no-repeat;
+    margin:0;
+}
+
+/**************************************************************************/
+/* 段組みＡ                                            　　　　　　　       */
+/**************************************************************************/
+.boxA {
+  z-index: 1;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 1707px;
+  height:107px;
+  background-color:#191970;
+}
+
+/**************************************************************************/
+/* 段組みＢ（メインエリア）                               　　　　　　　       */
+/**************************************************************************/
+.boxB {
+  z-index: 3;
+  position: absolute;
+  left: 0px;
+  top: 107px;
+  width: 1707px;
+  height:800px;
+}
+
+/**************************************************************************/
+/* 段組みＣ（ボタン表示エリア）                           　　　　　　　       */
+/**************************************************************************/
+.boxC {
+  z-index: 2;
+  position: absolute;
+  left: 0px;
+  top: 907px;
+  width: 1707px;
+  height:160px;
+}
+
+
+/**************************************************************************/
+/* テキスト                                                               */
+/**************************************************************************/
+.textTOP {
+    position: absolute;
+    top: 25%;
+    bottom: 25%;
+    width: 100%
+}
+.textTOP p {
+    margin: 0;
+    color: white;
+    font-size: 50px;
+    font-weight:bold;
+    text-align: center;
+}
+
+
+/**************************************************************************/
+/* メインテキスト                                        　　　　　　　       */
+/**************************************************************************/
+.MainText {
+    position: absolute;
+    top: 30%;
+    bottom: 25%;
+    width: 100%
+}
+.MainText h1 {
+    margin: 0;
+    color: black;
+    font-size: 100px;
+    font-weight:bold;
+    text-align: center;
+}
+.MainText h2 {
+    margin: 0;
+    color: black;
+    font-size: 70px;
+    font-weight:bold;
+    text-align: center;
+}
+.MainText p {
+    margin: 0;
+    color: black;
+    font-size: 150px;
+    font-weight:bold;
+    text-align: center;
+}
+
+/**************************************************************************/
+/* 戻るボタン                                                                */
+/**************************************************************************/
+.BackButton {
+    position: relative;
+    left: 1427px;//(1707-280)
+    top: 0px;
+    width: 280px;
+    height: 107px;
+    background :url("../img/parts/BTN_HEAD_Home_NML.png") no-repeat;
+}
+
+/**************************************************************************/
+/* 戻るボタン用テキスト                                                      */
+/**************************************************************************/
+.BackButton_Text {
+    position: absolute;
+    top: 25%;
+    bottom: 25%;
+    width: 100%
+}
+.BackButton_Text p {
+    margin: 0;
+    color: white;
+    font-size: 40px;
+    font-weight:bold;
+    text-align: center;
+}
+
+
+/**************************************************************************/
+/* Foot部ボタン                                        　　　　　　　       */
+/**************************************************************************/
+.FootButton {
+  position: absolute;
+  width: 533px;
+  height: 160px;
+  background :url("../img/parts/BTN_FOOT_Type01_NML.png") no-repeat;
+}
+
+/**************************************************************************/
+/* Foot部ボタン（Long）                                 　　　　　　　       */
+/**************************************************************************/
+.FootButtonLong {
+  position: absolute;
+  left: 305px;
+  top: 0px;
+  width: 1097px;
+  height: 160px;
+  background :url("../img/parts/BTN_FOOT_Type01Long_NML.png") no-repeat;
+}
+
+/**************************************************************************/
+/* Foot部ボタン用テキスト                                                    */
+/**************************************************************************/
+.FootButton_Text {
+  position: absolute;
+  top: 30%;
+  bottom: 30%;
+  width: 100%;
+}
+.FootButton_Text p {
+  margin: 0;
+  color: white;
+  font-size: 60px;
+  font-weight:bold;
+  text-align: center;
+}
+
+/**************************************************************************/
+/* はいボタン 　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　*/
+/**************************************************************************/
+.FootButton.YesButton {
+    position: inherit;
+    left: 162px;
+    top: 0px;
+}
+
+/**************************************************************************/
+/* いいえボタン 　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　*/
+/**************************************************************************/
+.FootButton.NoButton {
+    position: inherit;
+    left: 1016px;
+    top: 0px;
+}
+
+
+input[type=checkbox] {
+    width: 80px;
+    height: 80px;
+    vertical-align: middle;
+}
+
+input[type=text] {
+    width: 1000px;
+    height: 100px;
+    vertical-align: middle;
+    font-size: 70px;
+}
+
+input[type=password] {
+    width: 1000px;
+    height: 100px;
+    vertical-align: middle;
+    font-size: 70px;
+}
