@@ -3,6 +3,7 @@
 var express = require('express');
 var morgan = require('morgan');
 var mysql = require('mysql');
+var request = require('request');
 var app = express();
 
 app.use(morgan('short'));
@@ -25,8 +26,8 @@ connection.connect(function(error) {
 });
 
 // ユーザ登録
-var createUser = function(id, gender, age, callback) {
-	var insertQuery = 'insert into Users (id, gender, age) values ('+id+",'"+gender+"',"+age+');';
+var createUser = function(id, gender, age, name, callback) {
+	var insertQuery = 'insert into Users (id, gender, age, name) values ('+id+",'"+gender+"',"+age+ ",'" + name + "'" + ');';
 	connection.query(insertQuery, function(err, rows, fields) {
 		callback(err, rows);
 	});
@@ -70,7 +71,8 @@ app.post("/api/createUser", function(req, res) {
 		var id = human['ID'];
 		var gender = human['Gender'];
 		var age = human['Age'];
-		createUser(id, gender, age, function(err, results) {
+		var name = human['Name'];
+		createUser(id, gender, age, name, function(err, results) {
 			if (err) {
 				console.log('create User err: ' + err);
 				res.contentType('application/json');
@@ -124,6 +126,28 @@ app.post('/api/RegisterStory', function(req, res) {
 			}
 		});
 	});
+});
+
+app.get('/api/DelayInfo', function(req, res) {
+	var headers = {'Content-Type':'application/json'};
+	var options = {
+		url:'https://rti-giken.jp/fhc/api/train_tetsudo/delay.json',
+		method:'GET',
+		headers:headers,
+		json:true
+	};
+	request(request, function(error, response, body) {
+		console.log(response);
+	});
+
+	res.contentType('application/json');
+	var json = {
+		Delay:{
+			Company:"JR東日本",
+			Name:"山手線"
+		}
+	};
+	res.end(JSON.stringify(json));
 });
 
 var server = app.listen(PORT, function() {
