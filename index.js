@@ -65,21 +65,25 @@ var getUserStory = function(id, callback) {
 	});
 }
 
-
-app.post("/api/createUser", function(req, res) {
-	var data ='';
+var decodeJson = function(req, callback) {
+	var data = '';
 	req.on('data', function(chunk) {
 		data += chunk;
 	});
 	req.on('end', function() {
-		var json = JSON.parse(data);
+		callback(JSON.parse(data));
+	});
+}
+
+app.post("/api/createUser", function(req, res) {
+
+	decodeJson(req, function(json) {
 		var human = json['Human'];
 		var id = human['ID'];
 		var gender = human['Gender'];
 		var age = human['Age'];
-
 		var result = createUser(id, gender, age);
-		console.log('result: ' + result);
+		console.log(result);
 	});
 
 	res.contentType('application/json');
@@ -87,45 +91,56 @@ app.post("/api/createUser", function(req, res) {
 });
 
 app.post("/api/getUserStory", function(req, res) {
-	var data = '';
-	req.on('data', function(chunk) {
-		data += chunk;
-	});
-	req.on('end', function() {
-		var jsonData = JSON.parse(data);
-		var id = jsonData['ID'];
+
+	decodeJson(req, function(json) {
+		var id = json['ID'];
 		getUserStory(id, function(results) {
-			// res.send(results);
-			// console.log(results);
 			res.contentType('application/json');
 			var obj = [];
-			for (var i = 0;i < results.length; i++) {
-				console.log(results[i]['story']);
-				obj.push(results[i]['story']);
+			for (var i = 0; i < results.length; i++) {
+				var story = results[i]['story'];
+				console.log(story);
+				obj.push(story);
 			}
-			var json = {
-				story:obj
+			var jsonObj = {
+				story: obj
 			};
-			console.log(json);
-			var jsonStr = JSON.stringify(json);
-			console.log(jsonStr['story']);
-			res.end(JSON.stringify(jsonStr));
+			var jsonStr = JSON.stringify(jsonObj);
+			res.end(jsonStr);
 		});
 	});
+	// var data = '';
+	// req.on('data', function(chunk) {
+	// 	data += chunk;
+	// });
+	// req.on('end', function() {
+	// 	var jsonData = JSON.parse(data);
+	// 	var id = jsonData['ID'];
+	// 	getUserStory(id, function(results) {
+	// 		// res.send(results);
+	// 		// console.log(results);
+	// 		res.contentType('application/json');
+	// 		var obj = [];
+	// 		for (var i = 0;i < results.length; i++) {
+	// 			console.log(results[i]['story']);
+	// 			obj.push(results[i]['story']);
+	// 		}
+	// 		var json = {
+	// 			story:obj
+	// 		};
+	// 		console.log(json);
+	// 		var jsonStr = JSON.stringify(json);
+	// 		console.log(jsonStr['story']);
+	// 		res.end(JSON.stringify(jsonStr));
+	// 	});
+	// });
 });
 
 app.post('/api/RegisterStory', function(req, res) {
-	var data = '';
-	req.on('data',function(chunk) {
-		data += chunk;
-	});
-	req.on('end', function() {
-		var json = JSON.parse(data);
+	decodeJson(req, function(json) {
 		var id = json['ID'];
 		var story = json['Story'];
-
 		var result = registerStory(id, story);
-
 		console.log('result : ' + result);
 	});
 
@@ -136,10 +151,3 @@ app.post('/api/RegisterStory', function(req, res) {
 var server = app.listen(PORT, function() {
 	console.log('running post :' + PORT);
 });
-// register story
-// curl -X POST -d '{"ID":"123","story":"トイレットペーパー"}' http://192.168.3.70:5000/api/RegisterStory
-
-// get User Story 
-// curl -X POST -d '{"ID":"123"}' http://192.168.3.70:5000/api/getUserStory
-
-// curl -X POST -d '{"Human":{"ID":"123","Gender":"Male","Age":"21"}}' http://192.168.3.70:5000/api/createUser
