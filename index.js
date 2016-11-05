@@ -25,18 +25,14 @@ connection.connect(function(error) {
 });
 
 // ユーザ登録
-function createUser(id, gender, age) {
+var createUser = function(id, gender, age, callback) {
 	var insertQuery = 'insert into Users (id, gender, age) values ('+id+",'"+gender+"',"+age+');';
 	connection.query(insertQuery, function(err, rows, fields) {
-		if (err) {
-			console.log('create User err: ' + err);
-			return 'error';
-		}
-		return 'ok';
+		callback(err, rows);
 	});
 }
 // ユーザのネタを登録する
-function registerStory(id, story) {
+var registerStory = function(id, story, callback) {
 	var insertQuery = "insert into Storys(id,story) ";
 	insertQuery += "values("+ id +",'"+ story +"');";
 
@@ -46,17 +42,17 @@ function registerStory(id, story) {
 			return 'error';
 		}
 		return 'ok';
+		callback(err, rows);
 	});
 }
 // ユーザの登録したネタを持ってくる
 var getUserStory = function(id, callback) {
 	var query = 'select story from storys where id='+id+';';
-
 	connection.query(query, function(err, rows, fields) {
 		if (err) {
 			console.log('get user info err: ' + err);
 		}
-		callback(rows);
+		callback(err, rows);
 	});
 }
 
@@ -71,37 +67,45 @@ var decodeJson = function(req, callback) {
 }
 
 app.post("/api/createUser", function(req, res) {
-
 	decodeJson(req, function(json) {
 		var human = json['Human'];
 		var id = human['ID'];
 		var gender = human['Gender'];
 		var age = human['Age'];
-		var result = createUser(id, gender, age);
-		console.log(result);
+		createUser(id, gender, age, function(err, results) {
+			if (err) {
+				console.log('create User err: ' + err);
+				res.contentType('application/json');
+				res.end(JSON.stringify({"msg":"400 missing"}));
+			} else {
+				res.contentType('application/json');
+				res.end(JSON.stringify({"msg":"200 OK"}));
+			}
+		});
 	});
-
-	res.contentType('application/json');
-	res.end(JSON.stringify({"msg":"200 OK"}));
 });
 
 app.post("/api/getUserStory", function(req, res) {
-
 	decodeJson(req, function(json) {
 		var id = json['ID'];
-		getUserStory(id, function(results) {
-			res.contentType('application/json');
-			var obj = [];
-			for (var i = 0; i < results.length; i++) {
-				var story = results[i]['story'];
-				console.log(story);
-				obj.push(story);
+		getUserStory(id, function(error, results) {
+			if (error) {
+				res.contentType('application/json');
+				res.end(JSON.stringify({'msg':'400 Missing'}));
+			} else {
+				res.contentType('application/json');
+				var obj = [];
+				for (var i = 0; i < results.length; i++) {
+					var story = results[i]['story'];
+					console.log(story);
+					obj.push(story);
+				}
+				var jsonObj = {
+					story: obj
+				};
+				var jsonStr = JSON.stringify(jsonObj);
+				res.end(jsonStr);
 			}
-			var jsonObj = {
-				story: obj
-			};
-			var jsonStr = JSON.stringify(jsonObj);
-			res.end(jsonStr);
 		});
 	});
 });
@@ -112,12 +116,16 @@ app.post('/api/RegisterStory', function(req, res) {
 		var story = json['Story'];
 		console.log(id);
 		console.log(story);
-		var result = registerStory(id, story);
-		console.log('result : ' + result);
+		registerStory(id, story, function(error, results) {
+			if (error) {
+				res.contentType('application/json');
+				res.end(JSON.stringify({'msg':'400 Missing'}));
+			} else {
+				res.contentType('application/json');
+				res.end(JSON.stringify({'msg':'200 OK'}));
+			}
+		});
 	});
-
-	res.contentType('application/json');
-	res.end(JSON.stringify({'msg':'200 OK'}));
 });
 
 var server = app.listen(PORT, function() {
